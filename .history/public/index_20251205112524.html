@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Node.js Chat</title>
+    <style>
+        /* Basic styling */
+    </style>
+</head>
+
+<body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="usernameInput" autocomplete="off" placeholder="Enter your name" /><br>
+        <input id="m" autocomplete="off" placeholder="Type your message" /><button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('m');
+        const usernameInput = document.getElementById('usernameInput');
+        const messages = document.getElementById('messages');
+
+        let username = '';
+        const randUserNames = ["Michael", "Perry", "Jessie", "Amanda", "Jessica", "Daniel", "David", "Emily", "Sarah", "Andrew", "Samantha", "Christopher", "Hannah", "Joshua", "Elizabeth", "Matthew", "Ashley", "Nicholas", "Megan", "Joseph", "Lauren", "Tyler", "Kayla", "Brandon", "Rachel", "Ethan", "Victoria", "Samuel", "Jennifer", "Anthony", "Natalie", "Dylan", "Olivia", "Alexander", "Grace", "Ryan", "Chloe", "Zachary", "Brianna", "Justin", "Anna", "Kevin", "Sofia", "Thomas", "Alyssa", "Jordan", "Madison", "Kyle", "Lily", "Brian", "Sydney", "Eric", "Hailey", "Steven", "Kaitlyn", ];
+        let randUserName = randUserNames[Math.floor(Math.random() * randUserNames.length)];
+        usernameInput.value = randUserName;
+        username = usernameInput.value.trim();
+        socket.emit('set name', username);
+
+        // Prompt for username
+        let oldUsername = username;
+        usernameInput.addEventListener('change', () => {
+            username = usernameInput.value.trim();
+            if (username) {
+                socket.emit('set name', username);
+                const newItem = document.createElement('li');
+                newItem.textContent = `${oldUsername} is now called ${username}.`;
+                messages.appendChild(newItem);
+                oldUsername = username;
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value && username) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', (data) => {
+            const item = document.createElement('li');
+            item.textContent = `${data.username}: ${data.message}`;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('user joined', (name) => {
+            if (username == randUserName)
+                return;
+            const item = document.createElement('li');
+            item.textContent = `${name} has joined the chat.`;
+            messages.appendChild(item);
+        });
+
+        socket.on('user left', (name) => {
+            if (oldUsername != username) {
+                return;
+            }
+            const item = document.createElement('li');
+            item.textContent = `${name} has left the chat.`;
+            messages.appendChild(item);
+        });
+    </script>
+</body>
+
+</html>

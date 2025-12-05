@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Node.js Chat</title>
+    <style>
+        /* Basic styling */
+    </style>
+</head>
+
+<body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="usernameInput" autocomplete="off" placeholder="Enter your name" /><br>
+        <input id="m" autocomplete="off" placeholder="Type your message" /><button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('m');
+        const usernameInput = document.getElementById('usernameInput');
+        const messages = document.getElementById('messages');
+
+        let username = '';
+        const randUserNames = ["Michael", "Perry", "Jessie"];
+        usernameInput.value = randUserNames[Math.floor(Math.random() * randUserNames.length)];
+        username = usernameInput.value.trim();
+        socket.emit('set name', username);
+        usernameInput.addEventListener("change", () => {
+            username = usernameInput.value.trim();
+            if (username) {
+                socket.emit('set name', username);
+                usernameInput.disabled = true; // Disable after setting
+            }
+        })
+
+        // Prompt for username
+        usernameInput.addEventListener('change', () => {
+            username = usernameInput.value.trim();
+            if (username) {
+                socket.emit('set name', username);
+                usernameInput.disabled = true; // Disable after setting
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value && username) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', (data) => {
+            const item = document.createElement('li');
+            item.textContent = `${data.username}: ${data.message}`;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('user joined', (name) => {
+            const item = document.createElement('li');
+            item.textContent = `${name} has joined the chat.`;
+            messages.appendChild(item);
+        });
+
+        socket.on('user left', (name) => {
+            const item = document.createElement('li');
+            item.textContent = `${name} has left the chat.`;
+            messages.appendChild(item);
+        });
+    </script>
+</body>
+
+</html>
