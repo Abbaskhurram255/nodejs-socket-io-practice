@@ -3,17 +3,18 @@
 
 <head>
     <title>Node.js Chat</title>
-    <style>
-        /* Basic styling */
-    </style>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
 </head>
 
 <body>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-        <input id="usernameInput" autocomplete="off" placeholder="Enter your name" /><br>
-        <input id="m" autocomplete="off" placeholder="Type your message" /><button>Send</button>
-    </form>
+    <div class="container">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="usernameInput" autocomplete="off" placeholder="Enter your name" /><br>
+            <input id="m" placeholder="Type your message" /><button class="btn primary" type="submit">Send</button>
+        </form>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
