@@ -12,20 +12,20 @@
         <ul id="messages"></ul>
         <form id="form" action="">
             <input id="usernameInput" autocomplete="off" placeholder="Enter your name" /><br>
-            <input id="m" placeholder="Type your message" /><button class="btn primary" type="submit">Send</button>
+            <input id="msg" placeholder="Type your message" /><button class="btn primary" type="submit">Send</button>
         </form>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="./socket.io.js"></script>
     <script>
         const socket = io();
-        const form = document.getElementById('form');
-        const input = document.getElementById('m');
-        const usernameInput = document.getElementById('usernameInput');
-        const messages = document.getElementById('messages');
+        const form = document.querySelector('#form');
+        const input = document.querySelector('#msg');
+        const usernameInput = document.querySelector('#usernameInput');
+        const messages = document.querySelector('#messages');
 
         let username = '';
-        const randUserNames = ["Michael", "Perry", "Jessie", "Amanda", "Jessica", "Daniel", "David", "Emily", "Sarah", "Andrew", "Samantha", "Christopher", "Hannah", "Joshua", "Elizabeth", "Ashley", "Nicholas", "Megan", "Joseph", "Lauren", "Tyler", "Kayla", "Brandon", "Rachel", "Ethan", "Victoria", "Samuel", "Jennifer", "Anthony", "Natalie", "Dylan", "Olivia", "Alexander", "Grace", "Ryan", "Chloe", "Zachary", "Brianna", "Justin", "Anna", "Kevin", "Sofia", "Thomas", "Alyssa", "Jordan", "Madison", "Kyle", "Lily", "Brian", "Sydney", "Eric", "Hailey", "Steven", "Kaitlyn", "Katherine", "Alexis", "Kate", "Isabella", "Jason", "Kylee", "Jacob", "Bianca", "Caleb", "Brenice", "Abigail", "Vermon", "Tina", "Sandy", "Roger", "Nancy", "Monica", "Liam", "Logan", "Noah", "Evelyn", "Scarlett", "Levi", "Madelyn", "Jaxon", "Carter", "Luke", "Owen", "Gabriel", "Aiden", "Lucas", "Mia", "Ella", "Aria", "Zoe", "Nora", "Riley", "Hazel", "Chloe", "Luna", "Addison", "Eleanor", "Stella", "Natalia", "Violet", "Audrey", "Skylar", "Paisley", "Claire", "Brooklyn", "Bella", "Savannah", "Lucy", "Anna", "Caroline", "Genesis", "Aaliyah", "Kennedy", "Kinsley", "Allison", "Maya", "Sarah", "Madeline", "Cora", "Ruby", "Eva", "Serenity", "Autumn", "Adeline", "Hayley", "Gianna", "Valentina", "Isabelle", "Elena", "Piper", "Lydia", "Aubrey", "Josephine", "Nevaeh", "Ivy", "Clara", "Vivian", "Reagan", "Madilyn", "Peyton", "Julia", "Rylee", "Melanie", "Raelynn", "Melody", "Athena", "Mariah", "Liliana", "Hadley", "Jade", "Emery", "Adalynn", "Ximena", "Alina", "Cecilia", "Margaret", "Delilah", "Nicole", "Ariana", "Kimberly", "Juliana", "Valeria", "Maryam", "Lilah", "Esther", "Harmony", "Rosemary", "Sinclair", "Kyle"];
+        const randUserNames = ["Michael", "Perry", "Jessie", "Amanda", "Jessica", "Daniel", "David", "Emily", "Sarah", "Andrew", "Samantha", "Christopher", "Hannah", "Joshua", "Elizabeth", "Ashley", "Nicholas", "Megan", "Joseph", "Lauren", "Tyler", "Kayla", "Brandon", "Rachel", "Ethan", "Victoria", "Samuel", "Jennifer", "Anthony", "Natalie", "Dylan", "Olivia", "Alexander", "Grace", "Ryan", "Chloe", "Zachary", "Brianna", "Justin", "Anna", "Kevin", "Sofia", "Thomas", "Alyssa", "Jordan", "Madison", "Kyle", "Lily", "Brian", "Sydney", "Eric", "Hailey", "Steven", "Kaitlyn", "Katherine", "Alexis", "Kate", "Isabella", "Jason", "Kylee", "Jacob", "Bianca", "Caleb", "Brenice", "Abigail", "Vermon", "Tina", "Sandy", "Roger", "Nancy", "Monica", "Liam", "Logan", "Noah", "Evelyn", "Scarlett", "Levi", "Madelyn", "Jaxon", "Carter", "Luke", "Owen", "Gabriel", "Aiden", "Lucas", "Mia", "Ella", "Aria", "Zoe", "Nora", "Riley", "Hazel", "Chloe", "Luna", "Addison", "Eleanor", "Stella", "Natalia", "Violet", "Audrey", "Skylar", "Paisley", "Claire", "Brooklyn", "Bella", "Savannah", "Lucy", "Anna", "Caroline", "Genesis", "Aaliyah", "Kennedy", "Kinsley", "Allison", "Maya", "Sarah", "Madeline", "Cora", "Ruby", "Eva", "Hayley", "Isabelle", "Pristine", "Trixie", "Josephine", "Ivy", "Clara", "Vivian", "Reagan", "Madeline", "Alina", "Cecilia", "Margaret", "Delilah", "Nicole", "Ariana", "Kimberly", "Juliana", "Valeria", "Maryam", "Lilah", "Esther", "Harmony", "Rosemary", "Sinclair", "Kyle"];
         let randUserName = randUserNames[Math.floor(Math.random() * randUserNames.length)];
         usernameInput.value = randUserName;
         username = usernameInput.value.trim();
